@@ -21,9 +21,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 import BusinessIcon from '@material-ui/icons/Business'
 import GroupIcon from '@material-ui/icons/Group'
 import ListAltIcon from '@material-ui/icons/ListAlt'
+import GradeIcon from '@material-ui/icons/Grade'
 
 import {useDispatch, useSelector} from 'react-redux'
-import {handleDrawerOpen, handleDrawerClose} from '../redux/reducers/mainReducer'
+import {handleDrawerToggle} from '../redux/reducers/mainReducer'
 
 
 
@@ -94,20 +95,21 @@ const MainContainer = ({children, title}) => {
     const {isOpen} = useSelector(state => state.main)
 
     const classes = useStyles()
+    
     const theme = useTheme()
     
     const onOpen = () => {
-      dispatch(handleDrawerOpen(true))
+      dispatch(handleDrawerToggle(true))
     }
 
     const onClose = () => {
-      dispatch(handleDrawerClose(false))
+      dispatch(handleDrawerToggle(false))
     }
 
     const togglePage = () => {
       setTimeout(() => {
-        dispatch(handleDrawerClose(false))
-      }, 300)
+        dispatch(handleDrawerToggle(false))
+      })
     }
 
 
@@ -137,7 +139,7 @@ const MainContainer = ({children, title}) => {
               <MenuIcon />
             </IconButton>
             <Link href={'/admin'}>
-            <a style={{color: '#fff'}}>
+            <a onClick={togglePage} style={{color: '#fff'}}>
             <Typography variant="h6" noWrap>
               Quins
             </Typography>
@@ -162,18 +164,19 @@ const MainContainer = ({children, title}) => {
           </div>
           <Divider />
           <List>
-            {[
+            {[  
+                {text: 'Главная', url: '/admin', icon: <GradeIcon />},
                 {text: 'Проекты', url: '/admin/project', icon: <BusinessIcon />},
                 {text: 'Сотрудники', url: '/admin/worker', icon: <GroupIcon />},
                 {text: 'Список задач', url: '/admin/todo', icon: <ListAltIcon />},
-  
               ].map(el => (
                 <li key={el.text}>
                     <Link href={el.url}>
                     <a onClick={togglePage}>
                     <ListItem button>
                         <ListItemIcon>{el.icon}</ListItemIcon>
-                        <ListItemText primary={el.text} /></ListItem>
+                        <ListItemText>{el.text}</ListItemText>
+                    </ListItem>
                     </a>
                     </Link>
                 </li>
@@ -181,19 +184,17 @@ const MainContainer = ({children, title}) => {
           </List>
           <Divider />
         </Drawer>
-        <main
+        <div
           className={clsx(classes.content, {
             [classes.contentShift]: isOpen,
           })}
         >
           <div className={classes.drawerHeader} />
           {children}
-        </main>
+        </div>
       </div>
       </>
     )
 }
 
 export default MainContainer
-
-

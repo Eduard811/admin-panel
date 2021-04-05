@@ -1,18 +1,13 @@
-const HANDLE_DRAWER_OPEN = 'HANDLE_DRAWER_OPEN'
-const HANDLE_DRAWER_CLOSE = 'HANDLE_DRAWER_CLOSE'
+const HANDLE_DRAWER_TOGGLE = 'HANDLE_DRAWER_TOGGLE'
 
 const initialState = {
-  isOpen: false
+  isOpen: false,
+  value: 0
 }
 
 const mainReducer = (state = initialState, action) => {
   switch (action.type) {
-    case HANDLE_DRAWER_OPEN:
-      return {
-        ...state,
-        isOpen: action.isOpen
-      }
-    case HANDLE_DRAWER_CLOSE:
+    case HANDLE_DRAWER_TOGGLE:
       return {
         ...state,
         isOpen: action.isOpen
@@ -22,13 +17,7 @@ const mainReducer = (state = initialState, action) => {
   }
 }
 
-export const handleDrawerOpen = (isOpen) => ({
-    type: HANDLE_DRAWER_OPEN, isOpen
-})
-
-export const handleDrawerClose = (isOpen) => ({
-    type: HANDLE_DRAWER_OPEN, isOpen
-})
+export const handleDrawerToggle = (isOpen) => ({type: HANDLE_DRAWER_TOGGLE, isOpen})
 
 
 export default mainReducer
