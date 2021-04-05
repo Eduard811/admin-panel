@@ -22,6 +22,11 @@ import BusinessIcon from '@material-ui/icons/Business'
 import GroupIcon from '@material-ui/icons/Group'
 import ListAltIcon from '@material-ui/icons/ListAlt'
 
+import {useDispatch, useSelector} from 'react-redux'
+import {handleDrawerOpen, handleDrawerClose} from '../redux/reducers/mainReducer'
+
+
+
 const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
@@ -83,17 +88,38 @@ const useStyles = makeStyles((theme) => ({
 
 
 const MainContainer = ({children, title}) => {
+
+    const dispatch = useDispatch()
+
+    const {isOpen} = useSelector(state => state.main)
+
     const classes = useStyles()
     const theme = useTheme()
-    const [open, setOpen] = React.useState(false)
+    // const [open, setOpen] = React.useState(false)
   
-    const handleDrawerOpen = () => {
-      setOpen(true)
-    }
+    // const handleDrawerOpen = () => {
+    //   setOpen(true)
+    // }
   
-    const handleDrawerClose = () => {
-      setOpen(false)
+    // const handleDrawerClose = () => {
+    //   setOpen(false)
+    // }
+
+
+    const onOpen = () => {
+      dispatch(handleDrawerOpen(true))
     }
+
+    const onClose = () => {
+      dispatch(handleDrawerClose(false))
+    }
+
+    const togglePage = () => {
+      setTimeout(() => {
+        dispatch(handleDrawerClose(false))
+      }, 300)
+    }
+
 
     return (
       <>
@@ -107,16 +133,16 @@ const MainContainer = ({children, title}) => {
         <AppBar
           position="fixed"
           className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
+            [classes.appBarShift]: isOpen,
           })}
         >
           <Toolbar>
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerOpen}
+              onClick={onOpen}
               edge="start"
-              className={clsx(classes.menuButton, open && classes.hide)}
+              className={clsx(classes.menuButton, isOpen && classes.hide)}
             >
               <MenuIcon />
             </IconButton>
@@ -134,13 +160,13 @@ const MainContainer = ({children, title}) => {
           className={classes.drawer}
           variant="persistent"
           anchor="left"
-          open={open}
+          open={isOpen}
           classes={{
             paper: classes.drawerPaper,
           }}
         >
           <div className={classes.drawerHeader}>
-            <IconButton onClick={handleDrawerClose}>
+            <IconButton onClick={onClose}>
               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
           </div>
@@ -154,7 +180,7 @@ const MainContainer = ({children, title}) => {
               ].map(el => (
                 <li key={el.text}>
                     <Link href={el.url}>
-                    <a>
+                    <a onClick={togglePage}>
                     <ListItem button>
                         <ListItemIcon>{el.icon}</ListItemIcon>
                         <ListItemText primary={el.text} /></ListItem>
@@ -167,7 +193,7 @@ const MainContainer = ({children, title}) => {
         </Drawer>
         <main
           className={clsx(classes.content, {
-            [classes.contentShift]: open,
+            [classes.contentShift]: isOpen,
           })}
         >
           <div className={classes.drawerHeader} />
