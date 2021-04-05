@@ -9,7 +9,6 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import List from '@material-ui/core/List'
-import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -24,7 +23,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt'
 import GradeIcon from '@material-ui/icons/Grade'
 
 import {useDispatch, useSelector} from 'react-redux'
-import {handleDrawerToggle} from '../redux/reducers/mainReducer'
+import {handleDrawerToggle, setActiveItem} from '../redux/reducers/mainReducer'
 
 
 
@@ -85,6 +84,9 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  activeItem: {
+    color: '#3f51b5'
+  }
 }))
 
 
@@ -92,7 +94,7 @@ const MainContainer = ({children, title}) => {
 
     const dispatch = useDispatch()
 
-    const {isOpen} = useSelector(state => state.main)
+    const {isOpen, activeItem} = useSelector(state => state.main)
 
     const classes = useStyles()
     
@@ -106,9 +108,10 @@ const MainContainer = ({children, title}) => {
       dispatch(handleDrawerToggle(false))
     }
 
-    const togglePage = () => {
+    const togglePage = (index) => {
       setTimeout(() => {
         dispatch(handleDrawerToggle(false))
+        dispatch(setActiveItem(index))
       })
     }
 
@@ -138,14 +141,7 @@ const MainContainer = ({children, title}) => {
             >
               <MenuIcon />
             </IconButton>
-            <Link href={'/admin'}>
-            <a onClick={togglePage} style={{color: '#fff'}}>
-            <Typography variant="h6" noWrap>
-              Quins
-            </Typography>
-            </a>
-            </Link>
-            
+
           </Toolbar>
         </AppBar>
         <Drawer
@@ -164,18 +160,27 @@ const MainContainer = ({children, title}) => {
           </div>
           <Divider />
           <List>
+                <li>
+                    <Link href={'/admin'}>
+                    <a onClick={() => togglePage(null)}>
+                    <ListItem button>
+                        <ListItemIcon className={activeItem === null ? classes.activeItem : ''}><GradeIcon /></ListItemIcon>
+                        <ListItemText className={activeItem === null ? classes.activeItem : ''}>Главная</ListItemText>
+                    </ListItem>
+                    </a>
+                    </Link>
+                </li>
             {[  
-                {text: 'Главная', url: '/admin', icon: <GradeIcon />},
                 {text: 'Проекты', url: '/admin/project', icon: <BusinessIcon />},
                 {text: 'Сотрудники', url: '/admin/worker', icon: <GroupIcon />},
                 {text: 'Список задач', url: '/admin/todo', icon: <ListAltIcon />},
-              ].map(el => (
+              ].map((el, index) => (
                 <li key={el.text}>
                     <Link href={el.url}>
-                    <a onClick={togglePage}>
+                    <a onClick={() => togglePage(index)}>
                     <ListItem button>
-                        <ListItemIcon>{el.icon}</ListItemIcon>
-                        <ListItemText>{el.text}</ListItemText>
+                        <ListItemIcon className={activeItem === index ? classes.activeItem : ''}>{el.icon}</ListItemIcon>
+                        <ListItemText className={activeItem === index ? classes.activeItem : ''}>{el.text}</ListItemText>
                     </ListItem>
                     </a>
                     </Link>
