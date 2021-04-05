@@ -3,3 +3,10 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+a:active, /* активная/посещенная ссылка */
+a:hover,  /* при наведении */
+a {
+  text-decoration: none;
+  color: #666;
+}

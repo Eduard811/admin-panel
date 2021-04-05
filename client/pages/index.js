@@ -6,7 +6,7 @@ export default function Home() {
       <Head>
         <title>Home</title>
       </Head>
-      <h1>Hello world!</h1>
+      <h1>Какой-то крутой сайт с афигенными стилями</h1>
     </div>
   )
 }
