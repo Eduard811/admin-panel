@@ -95,17 +95,7 @@ const MainContainer = ({children, title}) => {
 
     const classes = useStyles()
     const theme = useTheme()
-    // const [open, setOpen] = React.useState(false)
-  
-    // const handleDrawerOpen = () => {
-    //   setOpen(true)
-    // }
-  
-    // const handleDrawerClose = () => {
-    //   setOpen(false)
-    // }
-
-
+    
     const onOpen = () => {
       dispatch(handleDrawerOpen(true))
     }
