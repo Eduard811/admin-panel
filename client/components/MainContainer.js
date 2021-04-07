@@ -1,5 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
+import { useSelector, useDispatch } from 'react-redux'
+import { setIsAuth } from '../redux/reducers/userReducer'
 
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
@@ -24,15 +26,24 @@ const useStyles = makeStyles((theme) => ({
 
 const MainContainer = ({children, title}) => {
 
+  const dispatch = useDispatch()
+  const {isAuth} = useSelector(state => state.user)
+
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
   const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const logout = (data = {}) => {
+    localStorage.clear()
+    dispatch(setIsAuth(data, !isAuth))
     setAnchorEl(null)
   }
 
@@ -73,8 +84,7 @@ const MainContainer = ({children, title}) => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </div>
         </Toolbar>

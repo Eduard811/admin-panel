@@ -4,8 +4,8 @@ import { login } from '../http/userAPI'
 import { useSelector, useDispatch } from 'react-redux'
 import Loader from '../components/Loader'
 import { setIsAuth } from '../redux/reducers/userReducer'
-
 import Head from 'next/head'
+
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -14,8 +14,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
 
-
   const [username, setUsername] = useState('')
   const [password, setPasword] = useState('')
 
@@ -48,13 +45,12 @@ export default function Login() {
   const router = useRouter()
 
   const dispatch = useDispatch()
-  const {user, isAuth} = useSelector(state => state.user)
+  const {isAuth} = useSelector(state => state.user)
 
   const signIn = async () => {
-    let data
     try {
-      data = await login(username, password)
-      dispatch(setIsAuth(user, !isAuth))
+      const data = await login(username, password)
+      dispatch(setIsAuth(data, !isAuth))
     } catch (error) {
       alert(error.response.data.message)
     }
@@ -72,7 +68,6 @@ export default function Login() {
       <Head>
         <title>Login</title>
       </Head>
-
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>

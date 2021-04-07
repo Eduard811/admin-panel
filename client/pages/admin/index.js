@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {useRouter} from 'next/router'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import MainContainer from '../../components/MainContainer'
 import Loader from '../../components/Loader'
 

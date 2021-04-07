@@ -49,13 +49,15 @@ class authController {
             const user = await User.findOne({username})
 
             if (!user) {
-                return res.status(400).json({message: `Пользователь ${username} не найден`})
+                // return res.status(400).json({message: `Пользователь ${username} не найден`})
+                return res.status(400).json({message: 'Неверный логин или пароль'})
             }
 
             const validPassword = bcrypt.compareSync(password, user.password)
 
             if (!validPassword) {
-                return res.status(400).json({message: 'Введен неверный пароль'})
+                // return res.status(400).json({message: 'Введен неверный пароль'})
+                return res.status(400).json({message: 'Неверный логин или пароль'})
             }
 
             const token = generateAccessToken(user._id, user.roles)
@@ -75,6 +77,14 @@ class authController {
             console.log(error)
         }
     }
+
+    async check(req, res) {
+        const {_id, roles} = req.body
+
+        const token = generateAccessToken(_id, roles)
+        return res.json({token})
+    }
+    
 }
 
 module.exports = new authController()
