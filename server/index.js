@@ -1,7 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const authRoute = require('./routes/authRoute')
+const router = require('./routes/index')
 const cors = require('cors')
+const fileUpload = require('express-fileupload')
 
 const PORT = process.env.PORT || 5000
 
@@ -9,7 +10,8 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use('/auth', authRoute)
+app.use(fileUpload({}))
+app.use('/api', router)
 
 const start = async () => {
     try {
