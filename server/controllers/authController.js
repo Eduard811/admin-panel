@@ -43,6 +43,7 @@ class authController {
     }
 
     async login(req, res) {
+
         try {
             const {username, password} = req.body
             const user = await User.findOne({username})

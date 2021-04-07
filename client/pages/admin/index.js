@@ -22,7 +22,7 @@ const Main = () => {
   const handleClickProject = () => setProject(true)
   const handleCloseProject = () => setProject(false)
 
-  const {isAuth} = useSelector(state => state.main)
+  const {isAuth} = useSelector(state => state.user)
 
   const router = useRouter()
 

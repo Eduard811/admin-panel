@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { login } from '../http/userAPI'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Loader from '../components/Loader'
+import { setIsAuth } from '../redux/reducers/userReducer'
 
 import Head from 'next/head'
 import Avatar from '@material-ui/core/Avatar'
@@ -38,19 +39,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
 
+
+  const [username, setUsername] = useState('')
+  const [password, setPasword] = useState('')
+
   const classes = useStyles()
 
   const router = useRouter()
 
-  const {isAuth} = useSelector(state => state.main)
+  const dispatch = useDispatch()
+  const {user, isAuth} = useSelector(state => state.user)
 
   const signIn = async () => {
-    const response = await login()
-    console.log(response)
+    let data
+    try {
+      data = await login(username, password)
+      dispatch(setIsAuth(user, !isAuth))
+    } catch (error) {
+      alert(error.response.data.message)
+    }
   }
 
   useEffect(() => {
-    console.log('asdasdasda')
     if (isAuth) {
       router.push('/admin')
     }
@@ -78,11 +88,13 @@ export default function Login() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
+              value={username}
+              onChange={e => setUsername(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -94,8 +106,10 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={e => setPasword(e.target.value)}
             />
-            <Button onClick={signIn} type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+            <Button onClick={signIn} type="button" fullWidth variant="contained" color="primary" className={classes.submit}>
               Sign In
             </Button>
           </form>
