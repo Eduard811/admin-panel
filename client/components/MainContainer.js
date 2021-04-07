@@ -1,205 +1,89 @@
 import React from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 
-import clsx from 'clsx'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import CssBaseline from '@material-ui/core/CssBaseline'
+import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
-import Divider from '@material-ui/core/Divider'
+import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
-import BusinessIcon from '@material-ui/icons/Business'
-import GroupIcon from '@material-ui/icons/Group'
-import ListAltIcon from '@material-ui/icons/ListAlt'
-import GradeIcon from '@material-ui/icons/Grade'
-
-import {useDispatch, useSelector} from 'react-redux'
-import {handleDrawerToggle, setActiveItem} from '../redux/reducers/mainReducer'
-
-
-
-const drawerWidth = 240
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-  },
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-  },
-  content: {
+  title: {
     flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
   },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
-  activeItem: {
-    color: '#3f51b5'
-  }
 }))
-
 
 const MainContainer = ({children, title}) => {
 
-    const dispatch = useDispatch()
+  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const open = Boolean(anchorEl)
 
-    const {isOpen, activeItem} = useSelector(state => state.main)
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  }
 
-    const classes = useStyles()
-    
-    const theme = useTheme()
-    
-    const onOpen = () => {
-      dispatch(handleDrawerToggle(true))
-    }
-
-    const onClose = () => {
-      dispatch(handleDrawerToggle(false))
-    }
-
-    const togglePage = (index) => {
-      setTimeout(() => {
-        dispatch(handleDrawerToggle(false))
-        dispatch(setActiveItem(index))
-      })
-    }
-
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
     return (
       <>
-
       <Head>
       <title>{title}</title>
       </Head>
 
       <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: isOpen,
-          })}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={onOpen}
-              edge="start"
-              className={clsx(classes.menuButton, isOpen && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={isOpen}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={onClose}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-                <li>
-                    <Link href={'/admin'}>
-                    <a onClick={() => togglePage(null)}>
-                    <ListItem button>
-                        <ListItemIcon className={activeItem === null ? classes.activeItem : ''}><GradeIcon /></ListItemIcon>
-                        <ListItemText className={activeItem === null ? classes.activeItem : ''}>Главная</ListItemText>
-                    </ListItem>
-                    </a>
-                    </Link>
-                </li>
-            {[  
-                {text: 'Проекты', url: '/admin/project', icon: <BusinessIcon />},
-                {text: 'Сотрудники', url: '/admin/worker', icon: <GroupIcon />},
-                {text: 'Список задач', url: '/admin/todo', icon: <ListAltIcon />},
-              ].map((el, index) => (
-                <li key={el.text}>
-                    <Link href={el.url}>
-                    <a onClick={() => togglePage(index)}>
-                    <ListItem button>
-                        <ListItemIcon className={activeItem === index ? classes.activeItem : ''}>{el.icon}</ListItemIcon>
-                        <ListItemText className={activeItem === index ? classes.activeItem : ''}>{el.text}</ListItemText>
-                    </ListItem>
-                    </a>
-                    </Link>
-                </li>
-            ))}
-          </List>
-          <Divider />
-        </Drawer>
-        <div
-          className={clsx(classes.content, {
-            [classes.contentShift]: isOpen,
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          {children}
-        </div>
-      </div>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" className={classes.title}>
+            Quins
+          </Typography>
+            <div>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Logout</MenuItem>
+              </Menu>
+            </div>
+        </Toolbar>
+      </AppBar>
+      {children}
+    </div>
       </>
     )
 }
 
 export default MainContainer
+

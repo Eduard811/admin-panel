@@ -1,30 +1,21 @@
-const HANDLE_DRAWER_TOGGLE = 'HANDLE_DRAWER_TOGGLE'
-const SET_ACTIVE_ITEM = 'SET_ACTIVE_ITEM'
+// const TOGGLE_MODAL_IS_OPEN = 'TOGGLE_MODAL_IS_OPEN'
 
-const initialState = {
-  isOpen: false,
-  activeItem: null
-}
+// const initialState = {
+//   isOpen: false
+// }
 
-const mainReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case HANDLE_DRAWER_TOGGLE:
-      return {
-        ...state,
-        isOpen: action.isOpen
-      }
-    case SET_ACTIVE_ITEM:
-      return {
-        ...state,
-        activeItem: action.index
-      }
-    default:
-      return state
-  }
-}
+// const mainReducer = (state = initialState, action) => {
+//   switch (action.type) {
+//     case TOGGLE_MODAL_IS_OPEN:
+//       return {
+//         ...state,
+//         isOpen: action.isOpen
+//       }
+//     default:
+//       return state
+//   }
+// }
 
-export const handleDrawerToggle = (isOpen) => ({type: HANDLE_DRAWER_TOGGLE, isOpen})
-export const setActiveItem = (index) => ({type: SET_ACTIVE_ITEM, index})
+// export const toggleModalIsOpen = (isOpen) => ({type: HANDLE_DRAWER_TOGGLE, isOpen})
 
-
-export default mainReducer
+// export default mainReducer
