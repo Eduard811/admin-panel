@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
     }
   }, [])
 
-  if (isFetching) {
+  if (!isFetching) {
     return <Loader />
   }
  

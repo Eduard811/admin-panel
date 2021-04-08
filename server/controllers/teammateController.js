@@ -12,9 +12,8 @@ class teammateController {
         }
     }
 
-    async getAll(req, res) {d
+    async getAll(req, res) {
         try {
-
             const teammates = await Teammate.find()
             return res.json(teammates)
 

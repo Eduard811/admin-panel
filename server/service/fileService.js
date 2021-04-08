@@ -1,7 +1,7 @@
 const uuid = require('uuid')
 const path = require('path')
 
-class FileService {
+class fileService {
 
     saveFile(file) {
         try {
@@ -16,4 +16,4 @@ class FileService {
     
 }
 
-module.exports = new FileService()
+module.exports = new fileService()
