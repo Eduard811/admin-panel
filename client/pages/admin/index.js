@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
-import { createTeammate } from '../../http/teammateAPI'
+import { createTeammate, deleteTeammate } from '../../http/teammateAPI'
 import MainContainer from '../../components/MainContainer'
 import Loader from '../../components/Loader'
 import { getTeammates } from '../../redux/reducers/teammateReducer'
@@ -27,18 +27,18 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
-    paddingTop: 120
+    paddingTop: 120,
   },
   buttonWrap: {
     display: 'flex',
     flexDirection: 'column',
-    width: 280
+    width: 280,
   },
   button: {
     '&:first-child': {
-      marginTop: 'unset'
+      marginTop: 'unset',
     },
-    marginTop: 10
+    marginTop: 10,
   },
   input: {
     display: 'none',
@@ -55,21 +55,21 @@ const useStyles = makeStyles((theme) => ({
   },
   grid: {
     maxWidth: '100%',
-    width: 320
-  }
+    width: 320,
+  },
 }))
 
 const Main = () => {
   const [worker, setWorker] = useState(false)
-  const [project, setProject] = useState(false)
+  const [deleteWorker, setDeleteWorker] = useState(false)
 
   const onClickWorker = () => setWorker(true)
   const onCloseWorker = () => setWorker(false)
-  const onClickDeleteWorker = () => setProject(true)
-  const onCloseDeleteWorker = () => setProject(false)
-  
-  const { isAuth } = useSelector(state => state.user)
-  const { teammates } = useSelector(state => state.teammate)
+  const onClickDeleteWorker = () => setDeleteWorker(true)
+  const onCloseDeleteWorker = () => setDeleteWorker(false)
+
+  const { isAuth } = useSelector((state) => state.user)
+  const { teammates } = useSelector((state) => state.teammate)
 
   const dispatch = useDispatch()
 
@@ -89,7 +89,7 @@ const Main = () => {
   const [name, setName] = useState('')
   const [profession, setProfession] = useState('')
   const [file, setFile] = useState('')
-  
+
   const selectFile = (event) => setFile(event.target.files[0])
 
   const addTeammate = async () => {
@@ -102,17 +102,30 @@ const Main = () => {
     setWorker(false)
     alert('Сотрудник добавлен')
   }
-  
+
+  const onDeleteTeammate = (id) => {
+    deleteTeammate(id).then(() => {
+      dispatch(getTeammates())
+    })
+    setDeleteWorker(false)
+    alert('Сотрудник удален')
+  }
+
   return isAuth ? (
     <MainContainer title={'Главная'}>
       <div className={classes.container}>
         <div className={classes.buttonWrap}>
-        <Button className={classes.button} variant="outlined" color="primary" onClick={onClickWorker}>
-          Добавить сотрудника
-        </Button>
-        <Button className={classes.button} variant="outlined" color="secondary" onClick={onClickDeleteWorker}>
-          Удалить сотрудника
-        </Button>
+          <Button className={classes.button} variant="outlined" color="primary" onClick={onClickWorker}>
+            Добавить сотрудника
+          </Button>
+          <Button
+            className={classes.button}
+            variant="outlined"
+            color="secondary"
+            onClick={onClickDeleteWorker}
+          >
+            Удалить сотрудника
+          </Button>
         </div>
         <Dialog open={worker} onClose={onCloseWorker} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Добавить сотрудника</DialogTitle>
@@ -127,12 +140,14 @@ const Main = () => {
               type="email"
               fullWidth
             />
-            <TextField 
-              onChange={(e) => setProfession(e.target.value)} 
-              value={profession} margin="dense" 
-              id="post" label="Должность" 
-              type="email" 
-              fullWidth 
+            <TextField
+              onChange={(e) => setProfession(e.target.value)}
+              value={profession}
+              margin="dense"
+              id="post"
+              label="Должность"
+              type="email"
+              fullWidth
             />
             <div className={classes.inputWrap}>
               <input
@@ -159,31 +174,27 @@ const Main = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        <Dialog open={project} onClose={onCloseDeleteWorker} aria-labelledby="form-dialog-title">
+        <Dialog open={deleteWorker} onClose={onCloseDeleteWorker} aria-labelledby="form-dialog-title">
           <DialogContent>
-          <Grid item xs={12} md={6} className={classes.grid}>
-          <div className={classes.demo}>
-            <List>
-              {
-                teammates.map(el => 
-                  <ListItem key={el.id}>
-                  <ListItemAvatar>
-                    <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={el.name}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-                  )
-              }
-            </List>
-          </div>
-        </Grid>
+            <Grid item xs={12} md={6} className={classes.grid}>
+              <div className={classes.demo}>
+                <List>
+                  {teammates.map((el) => (
+                    <ListItem key={el._id}>
+                      <ListItemAvatar>
+                        <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
+                      </ListItemAvatar>
+                      <ListItemText primary={el.name} />
+                      <ListItemSecondaryAction>
+                        <IconButton edge="end" aria-label="delete" onClick={() => onDeleteTeammate(el._id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
+            </Grid>
           </DialogContent>
         </Dialog>
       </div>
