@@ -11,7 +11,6 @@ import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -50,23 +49,27 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     maxWidth: 752,
   },
-  demo: {
-    backgroundColor: theme.palette.background.paper,
-  },
   grid: {
     maxWidth: '100%',
     width: 320,
   },
+  dialogContent: {
+    width: 320,
+    padding: 'unset',
+    '&:first-child': {
+      paddingTop: 'unset'
+    }
+  }
 }))
 
 const Main = () => {
   const [worker, setWorker] = useState(false)
   const [deleteWorker, setDeleteWorker] = useState(false)
+  const [updateWorker, setUpdateWorker] = useState(false)
 
-  const onClickWorker = () => setWorker(true)
-  const onCloseWorker = () => setWorker(false)
-  const onClickDeleteWorker = () => setDeleteWorker(true)
-  const onCloseDeleteWorker = () => setDeleteWorker(false)
+  const onClickWorker = () => setWorker(!worker)
+  const onClickDeleteWorker = () => setDeleteWorker(!deleteWorker)
+  const onClickUpdateWorker = () => setUpdateWorker(!updateWorker)
 
   const { isAuth } = useSelector((state) => state.user)
   const { teammates } = useSelector((state) => state.teammate)
@@ -106,7 +109,6 @@ const Main = () => {
       setWorker(false)
       alert('Сотрудник добавлен')
     })
-    
   }
 
   const onDeleteTeammate = (id) => {
@@ -124,17 +126,14 @@ const Main = () => {
           <Button className={classes.button} variant="outlined" color="primary" onClick={onClickWorker}>
             Добавить сотрудника
           </Button>
-          <Button
-            className={classes.button}
-            variant="outlined"
-            color="secondary"
-            onClick={onClickDeleteWorker}
-          >
+          <Button className={classes.button} variant="outlined" onClick={onClickUpdateWorker}>
+            Редактировать сотрудника
+          </Button>
+          <Button className={classes.button} variant="outlined" color="secondary" onClick={onClickDeleteWorker}>
             Удалить сотрудника
           </Button>
         </div>
-        <Dialog open={worker} onClose={onCloseWorker} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Добавить сотрудника</DialogTitle>
+        <Dialog open={worker} onClose={onClickWorker} aria-labelledby="form-dialog-title">
           <DialogContent>
             <TextField
               onChange={(e) => setName(e.target.value)}
@@ -172,7 +171,7 @@ const Main = () => {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={onCloseWorker} color="primary">
+            <Button onClick={onClickWorker} color="primary">
               Отмена
             </Button>
             <Button onClick={addTeammate} color="primary">
@@ -180,10 +179,9 @@ const Main = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        <Dialog open={deleteWorker} onClose={onCloseDeleteWorker} aria-labelledby="form-dialog-title">
-          <DialogContent>
+        <Dialog open={deleteWorker} onClose={onClickDeleteWorker} aria-labelledby="form-dialog-title">
+          <DialogContent className={classes.dialogContent}>
             <Grid item xs={12} md={6} className={classes.grid}>
-              <div className={classes.demo}>
                 <List>
                   {teammates.map((el) => (
                     <ListItem key={el._id}>
@@ -199,8 +197,23 @@ const Main = () => {
                     </ListItem>
                   ))}
                 </List>
-              </div>
             </Grid>
+          </DialogContent>
+        </Dialog>
+        <Dialog open={updateWorker} onClose={onClickUpdateWorker} aria-labelledby="form-dialog-title">
+          <DialogContent className={classes.dialogContent}>
+            <List>
+              {teammates.map((el) => {
+                return (
+                  <ListItem key={el.id} button>
+                    <ListItemAvatar>
+                      <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
+                    </ListItemAvatar>
+                    <ListItemText primary={el.name} />
+                  </ListItem>
+                )
+              })}
+            </List>
           </DialogContent>
         </Dialog>
       </div>
