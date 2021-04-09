@@ -76,7 +76,6 @@ const Main = () => {
   const { teammates } = useSelector((state) => state.teammate)
 
   const dispatch = useDispatch()
-
   const router = useRouter()
   const classes = useStyles()
 
