@@ -17,11 +17,15 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    padding: '20px 0 20px 0'
   },
   root: {
     maxWidth: 345,
-    marginTop: 20
+    marginTop: 20,
+    '&:first-child': {
+      marginTop: 'unset'
+    }
   },
 })
 
