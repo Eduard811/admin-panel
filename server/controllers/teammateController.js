@@ -1,5 +1,6 @@
 const Teammate = require('../model/Teammate') 
 const teammateService = require('../service/teammateService')
+const fileService = require('../service/fileService')
 
 class teammateController {
 
@@ -65,6 +66,7 @@ class teammateController {
             }
 
             const teammate = await Teammate.findByIdAndDelete(id)
+            fileService.deleteFile(teammate.picture)
             return res.json(teammate)
 
         } catch (error) {

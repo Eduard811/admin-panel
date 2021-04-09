@@ -1,5 +1,6 @@
 const uuid = require('uuid')
 const path = require('path')
+const fs = require('fs')
 
 class fileService {
 
@@ -14,6 +15,10 @@ class fileService {
         }
     }
     
+    deleteFile(fileName) {
+        const filePath = path.resolve('static', fileName)
+        fs.unlinkSync(filePath)
+    }
 }
 
 module.exports = new fileService()

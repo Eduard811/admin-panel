@@ -44,7 +44,6 @@ export default function Home({response}) {
       <Head>
         <title>Home</title>
       </Head>
-      <h1>Quins</h1>
       {
         teammates.map(el => 
         <Card  key={el._id} className={classes.root}>
@@ -65,11 +64,6 @@ export default function Home({response}) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            Learn More
-          </Button>
-        </CardActions>
       </Card>
         )
       }

@@ -92,15 +92,21 @@ const Main = () => {
 
   const selectFile = (event) => setFile(event.target.files[0])
 
-  const addTeammate = async () => {
+  const addTeammate = () => {
     const formData = new FormData()
     formData.append('name', name)
     formData.append('profession', profession)
     formData.append('picture', file)
 
-    const data = await createTeammate(formData)
-    setWorker(false)
-    alert('Сотрудник добавлен')
+    createTeammate(formData).then(() => {
+      setName('')
+      setProfession('')
+      setFile('')
+      dispatch(getTeammates())
+      setWorker(false)
+      alert('Сотрудник добавлен')
+    })
+    
   }
 
   const onDeleteTeammate = (id) => {
