@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { createTeammate, deleteTeammate } from '../../http/teammateAPI'
@@ -57,9 +58,9 @@ const useStyles = makeStyles((theme) => ({
     width: 320,
     padding: 'unset',
     '&:first-child': {
-      paddingTop: 'unset'
-    }
-  }
+      paddingTop: 'unset',
+    },
+  },
 }))
 
 const Main = () => {
@@ -129,7 +130,12 @@ const Main = () => {
           <Button className={classes.button} variant="outlined" onClick={onClickUpdateWorker}>
             Редактировать сотрудника
           </Button>
-          <Button className={classes.button} variant="outlined" color="secondary" onClick={onClickDeleteWorker}>
+          <Button
+            className={classes.button}
+            variant="outlined"
+            color="secondary"
+            onClick={onClickDeleteWorker}
+          >
             Удалить сотрудника
           </Button>
         </div>
@@ -182,21 +188,21 @@ const Main = () => {
         <Dialog open={deleteWorker} onClose={onClickDeleteWorker} aria-labelledby="form-dialog-title">
           <DialogContent className={classes.dialogContent}>
             <Grid item xs={12} md={6} className={classes.grid}>
-                <List>
-                  {teammates.map((el) => (
-                    <ListItem key={el._id}>
-                      <ListItemAvatar>
-                        <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
-                      </ListItemAvatar>
-                      <ListItemText primary={el.name} />
-                      <ListItemSecondaryAction>
-                        <IconButton edge="end" aria-label="delete" onClick={() => onDeleteTeammate(el._id)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
+              <List>
+                {teammates.map((el) => (
+                  <ListItem key={el._id}>
+                    <ListItemAvatar>
+                      <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
+                    </ListItemAvatar>
+                    <ListItemText style={{color: '#666'}} primary={el.name} />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="delete" onClick={() => onDeleteTeammate(el._id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
             </Grid>
           </DialogContent>
         </Dialog>
@@ -205,12 +211,16 @@ const Main = () => {
             <List>
               {teammates.map((el) => {
                 return (
-                  <ListItem key={el.id} button>
-                    <ListItemAvatar>
-                      <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
-                    </ListItemAvatar>
-                    <ListItemText primary={el.name} />
-                  </ListItem>
+                  <Link key={el._id} href={`admin/teammate/${el._id}`}>
+                    <a>
+                      <ListItem button>
+                        <ListItemAvatar>
+                          <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
+                        </ListItemAvatar>
+                        <ListItemText primary={el.name} />
+                      </ListItem>
+                    </a>
+                  </Link>
                 )
               })}
             </List>

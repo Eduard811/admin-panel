@@ -10,6 +10,11 @@ export const fetchTeammates = async () => {
     return data
 }
 
+export const fetchTeammate = async (id) => {
+    const response = await $host.get(`/api/teammate/${id}`, {responseType: 'json'})
+    return response
+}
+
 export const deleteTeammate = async (id) => {
     const response = await $authHost.delete(`/api/teammate/${id}`)
     return response
