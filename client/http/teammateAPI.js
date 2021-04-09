@@ -9,3 +9,8 @@ export const fetchTeammates = async () => {
     const {data} = await $host.get('/api/teammate')
     return data
 }
+
+export const deleteTeammate = async (id) => {
+    const response = await $authHost.delete(`/api/teammate/${id}`)
+    return response
+}

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { createTeammate } from '../../http/teammateAPI'
 import MainContainer from '../../components/MainContainer'
 import Loader from '../../components/Loader'
+import { getTeammates } from '../../redux/reducers/teammateReducer'
 
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -12,6 +13,15 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText'
+import Avatar from '@material-ui/core/Avatar'
+import IconButton from '@material-ui/core/IconButton'
+import Grid from '@material-ui/core/Grid'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,24 +29,49 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     paddingTop: 120
   },
+  buttonWrap: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: 280
+  },
+  button: {
+    '&:first-child': {
+      marginTop: 'unset'
+    },
+    marginTop: 10
+  },
   input: {
     display: 'none',
   },
-  root: {
+  inputWrap: {
     marginTop: 15,
   },
+  root: {
+    flexGrow: 1,
+    maxWidth: 752,
+  },
+  demo: {
+    backgroundColor: theme.palette.background.paper,
+  },
+  grid: {
+    maxWidth: '100%',
+    width: 320
+  }
 }))
 
 const Main = () => {
   const [worker, setWorker] = useState(false)
-  // const [project, setProject] = useState(false)
+  const [project, setProject] = useState(false)
 
-  const handleClickWorker = () => setWorker(true)
-  const handleCloseWorker = () => setWorker(false)
-  // const handleClickProject = () => setProject(true)
-  // const handleCloseProject = () => setProject(false)
+  const onClickWorker = () => setWorker(true)
+  const onCloseWorker = () => setWorker(false)
+  const onClickDeleteWorker = () => setProject(true)
+  const onCloseDeleteWorker = () => setProject(false)
+  
+  const { isAuth } = useSelector(state => state.user)
+  const { teammates } = useSelector(state => state.teammate)
 
-  const { isAuth } = useSelector((state) => state.user)
+  const dispatch = useDispatch()
 
   const router = useRouter()
   const classes = useStyles()
@@ -46,6 +81,10 @@ const Main = () => {
       router.push('/login')
     }
   }, [isAuth])
+
+  useEffect(() => {
+    dispatch(getTeammates())
+  }, [])
 
   const [name, setName] = useState('')
   const [profession, setProfession] = useState('')
@@ -67,10 +106,15 @@ const Main = () => {
   return isAuth ? (
     <MainContainer title={'Главная'}>
       <div className={classes.container}>
-        <Button variant="outlined" color="primary" onClick={handleClickWorker}>
+        <div className={classes.buttonWrap}>
+        <Button className={classes.button} variant="outlined" color="primary" onClick={onClickWorker}>
           Добавить сотрудника
         </Button>
-        <Dialog open={worker} onClose={handleCloseWorker} aria-labelledby="form-dialog-title">
+        <Button className={classes.button} variant="outlined" color="secondary" onClick={onClickDeleteWorker}>
+          Удалить сотрудника
+        </Button>
+        </div>
+        <Dialog open={worker} onClose={onCloseWorker} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Добавить сотрудника</DialogTitle>
           <DialogContent>
             <TextField
@@ -90,7 +134,7 @@ const Main = () => {
               type="email" 
               fullWidth 
             />
-            <div className={classes.root}>
+            <div className={classes.inputWrap}>
               <input
                 onChange={selectFile}
                 accept="image/*"
@@ -107,7 +151,7 @@ const Main = () => {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseWorker} color="primary">
+            <Button onClick={onCloseWorker} color="primary">
               Отмена
             </Button>
             <Button onClick={addTeammate} color="primary">
@@ -115,24 +159,33 @@ const Main = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        {/* <Button variant="outlined" color="primary" onClick={handleClickProject}>
-          Добавить проект
-        </Button>
-        <Dialog open={project} onClose={handleCloseProject} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Добавить проект</DialogTitle>
+        <Dialog open={project} onClose={onCloseDeleteWorker} aria-labelledby="form-dialog-title">
           <DialogContent>
-            <TextField autoFocus margin="dense" id="title" label="Название" type="email" fullWidth />
-            <TextField margin="dense" id="description" label="Описание" type="email" fullWidth />
+          <Grid item xs={12} md={6} className={classes.grid}>
+          <div className={classes.demo}>
+            <List>
+              {
+                teammates.map(el => 
+                  <ListItem key={el.id}>
+                  <ListItemAvatar>
+                    <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={el.name}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+                  )
+              }
+            </List>
+          </div>
+        </Grid>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseProject} color="primary">
-              Отмена
-            </Button>
-            <Button onClick={handleCloseProject} color="primary">
-              Добавить
-            </Button>
-          </DialogActions>
-        </Dialog> */}
+        </Dialog>
       </div>
     </MainContainer>
   ) : (

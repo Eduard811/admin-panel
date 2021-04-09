@@ -1,6 +1,8 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import Head from 'next/head'
 import { fetchTeammates } from '../http/teammateAPI'
+import { useDispatch, useSelector } from 'react-redux' 
+import { setTeammates } from '../redux/reducers/teammateReducer'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -26,6 +28,16 @@ const useStyles = makeStyles({
 export default function Home({response}) {
 
   const classes = useStyles()
+
+  const dispach = useDispatch()
+
+  const {teammates} = useSelector(state => state.teammate)
+
+
+  useEffect(() => {
+    dispach(setTeammates(response))
+  }, [])
+
   
   return (
     <div className={classes.container}>
@@ -34,7 +46,7 @@ export default function Home({response}) {
       </Head>
       <h1>Quins</h1>
       {
-        response.map(el => 
+        teammates.map(el => 
         <Card  key={el._id} className={classes.root}>
         <CardActionArea>
           <CardMedia
@@ -54,9 +66,6 @@ export default function Home({response}) {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
-            Share
-          </Button>
           <Button size="small" color="primary">
             Learn More
           </Button>
