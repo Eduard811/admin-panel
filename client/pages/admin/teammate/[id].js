@@ -80,7 +80,7 @@ export default function Teammate({ data }) {
             </Button>
           </label>
         </div>
-        <Button onClick={update} variant="contained" component="span" color="primary">
+        <Button className={classes.inputWrap} onClick={update} variant="contained" component="span" color="primary">
               Обновить
         </Button>
       </Container>
