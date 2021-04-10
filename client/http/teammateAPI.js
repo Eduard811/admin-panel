@@ -5,6 +5,11 @@ export const createTeammate = async (teammate) => {
     return data
 }
 
+export const updateTeammate = async (teammate) => {
+    const {data} = await $authHost.put('/api/teammate', teammate)
+    return data
+}
+
 export const fetchTeammates = async () => {
     const {data} = await $host.get('/api/teammate')
     return data

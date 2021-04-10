@@ -41,16 +41,19 @@ class teammateController {
 
     async update(req, res) {
         try {
-
-            const {_id, teammate} = req.body
+            const {_id, name, profession, pictureName} = req.body
 
             if (!_id) {
                 return res.status(400).json({message: 'id не указан'})
             }
 
-            const updatedTeammate = await Teammate.findByIdAndUpdate(_id, teammate, {new: true})
-            return res.json(updatedTeammate)
+            if (!!req.files) {
+                fileService.updateFile(req.files.picture, pictureName)
+            }
 
+            const teammate = {name, profession}
+            const updatedTeammate = await Teammate.findByIdAndUpdate(_id, {...teammate, picture: pictureName}, {new: true})
+            res.json(updatedTeammate)
         } catch (error) {
             res.status(500).json(error)
         }

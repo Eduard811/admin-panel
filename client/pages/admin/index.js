@@ -23,7 +23,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Grid from '@material-ui/core/Grid'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
@@ -193,7 +193,7 @@ const Main = () => {
                     <ListItemAvatar>
                       <Avatar alt="" src={'http://localhost:5000/' + el.picture} />
                     </ListItemAvatar>
-                    <ListItemText style={{color: '#666'}} primary={el.name} />
+                    <ListItemText style={{ color: '#666' }} primary={el.name} />
                     <ListItemSecondaryAction>
                       <IconButton edge="end" aria-label="delete" onClick={() => onDeleteTeammate(el._id)}>
                         <DeleteIcon />

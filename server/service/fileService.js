@@ -16,9 +16,24 @@ class fileService {
     }
     
     deleteFile(fileName) {
-        const filePath = path.resolve('static', fileName)
-        fs.unlinkSync(filePath)
+        try {
+            const filePath = path.resolve('static', fileName)
+            fs.unlinkSync(filePath)
+        } catch (error) {
+            console.log(error)
+        }
     }
+
+    updateFile(file, pictureName) {
+        try {
+            this.deleteFile(pictureName)
+            const filePath = path.resolve('static', pictureName)
+            file.mv(filePath)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 }
 
 module.exports = new fileService()

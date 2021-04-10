@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Head from 'next/head'
 import { fetchTeammates } from '../http/teammateAPI'
-import { useDispatch, useSelector } from 'react-redux' 
+import { useDispatch, useSelector } from 'react-redux'
 import { setTeammates } from '../redux/reducers/teammateReducer'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -16,59 +16,54 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
-    padding: '20px 0 20px 0'
+    padding: '20px 0 20px 0',
   },
-  root: {
+  card: {
     maxWidth: 345,
     marginTop: 20,
     '&:first-child': {
-      marginTop: 'unset'
-    }
+      marginTop: 'unset',
+    },
   },
 })
 
-export default function Home({response}) {
-
+export default function Home({ response }) {
   const classes = useStyles()
 
   const dispach = useDispatch()
 
-  const {teammates} = useSelector(state => state.teammate)
-
+  const { teammates } = useSelector((state) => state.teammate)
 
   useEffect(() => {
     dispach(setTeammates(response))
   }, [])
 
-  
   return (
     <div className={classes.container}>
       <Head>
         <title>Home</title>
       </Head>
-      {
-        teammates.map(el => 
-        <Card  key={el._id} className={classes.root}>
-        <CardActionArea>
-          <CardMedia
-            component="img"
-            alt="Contemplative Reptile"
-            height="500"
-            image={'http://localhost:5000/' + el.picture}
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-            {el.name}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-            {el.profession}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-        )
-      }
+      {teammates.map((el) => (
+        <Card key={el._id} className={classes.card}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              alt="Contemplative Reptile"
+              height="500"
+              image={'http://localhost:5000/' + el.picture}
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                {el.name}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                {el.profession}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))}
     </div>
   )
 }
@@ -76,7 +71,6 @@ export default function Home({response}) {
 export async function getStaticProps() {
   const response = await fetchTeammates()
   return {
-    props: {response}, 
+    props: { response },
   }
 }
-
