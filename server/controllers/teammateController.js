@@ -1,12 +1,14 @@
 const Teammate = require('../model/Teammate') 
-const teammateService = require('../service/teammateService')
 const fileService = require('../service/fileService')
 
 class teammateController {
 
     async create(req, res) {
         try {
-            const teammate = await teammateService.create(req.body, req.files.picture)
+            const {name, proffesion} = req.body
+            const {picture} = req.files
+            const fileName = fileService.create(picture)
+            const teammate = Teammate.create({name, proffesion, picture: fileName})
             res.json(teammate)
         } catch (error) {
             res.status(500).json(error)
