@@ -5,10 +5,10 @@ class teammateController {
 
     async create(req, res) {
         try {
-            const {name, proffesion} = req.body
+            const {name, profession} = req.body
             const {picture} = req.files
-            const fileName = fileService.create(picture)
-            const teammate = Teammate.create({name, proffesion, picture: fileName})
+            const fileName = fileService.saveFile(picture)
+            const teammate = await Teammate.create({name, profession, picture: fileName})
             res.json(teammate)
         } catch (error) {
             res.status(500).json(error)
