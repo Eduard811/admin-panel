@@ -108,6 +108,9 @@ const Main = () => {
       dispatch(getTeammates())
       setWorker(false)
       alert('Сотрудник добавлен')
+    }).catch(error => {
+      setWorker(false)
+      alert(error.response.data.message)
     })
   }
 
