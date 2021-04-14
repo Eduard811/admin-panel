@@ -8,21 +8,19 @@ import Loader from '../components/Loader'
 
 
 function MyApp({ Component, pageProps }) {
-
+  
   const {isAuth} = useSelector(state => state.user)
   const dispatch = useDispatch()
-
   const [isFetching, setIsFetching] = useState(true)
-
-  useEffect( async () => {
-    try {
-      const data = await check()
+  
+  useEffect(() => {
+    check().then(data => {
       dispatch(setIsAuth(data, !isAuth))
-    } catch(error) {
-      console.log(error)
-    } finally {
+    }).catch(error => {
+      console.log(error.response.data.message)
+    }).finally(() => {
       setIsFetching(false)
-    }
+    })
   }, [])
 
   if (isFetching) {

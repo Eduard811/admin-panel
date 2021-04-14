@@ -78,10 +78,9 @@ class authController {
         }
     }
 
-    async check(req, res) {
-        const {_id, roles} = req.body
-
-        const token = generateAccessToken(_id, roles)
+    async checkAuth(req, res) {
+        const {id, roles} = req.user
+        const token = generateAccessToken(id, roles)
         return res.json({token})
     }
     

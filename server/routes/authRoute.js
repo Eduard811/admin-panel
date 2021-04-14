@@ -10,7 +10,7 @@ router.post('/registration', [
     check('password', 'Слишком маленький или большой пароль').isLength({min: 4, max: 12})
 ], authController.registration)
 router.post('/login', authController.login)
-router.get('/login', authMiddleware, authController.check)
+router.get('/check', authMiddleware, authController.checkAuth)
 router.get('/users', roleMiddleware(['ADMIN']), authController.getUsers)
 
 module.exports = router 

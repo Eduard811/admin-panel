@@ -9,7 +9,6 @@ module.exports = function(roles) {
         }
 
         try {
-
             const token = req.headers.authorization.split(' ')[1]
             
             if (!token) {
@@ -21,7 +20,7 @@ module.exports = function(roles) {
             let hasRole = false
 
             userRoles.forEach(role => {
-                if (roles.some(role)) {
+                if (roles.includes(role)) {
                     hasRole = true
                 }
             })
